@@ -1,0 +1,12 @@
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0;padding:0}
+.container{max-width:900px;margin:30px auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+h1,h2{margin-top:0}
+label{display:block;margin-top:10px}
+input[type=text],input[type=email],input[type=password],input[type=date],input[type=time],select,textarea{width:100%;padding:8px;margin-top:6px;border:1px solid #ddd;border-radius:4px}
+button{padding:8px 14px;border:none;border-radius:6px;background:#2b6cb0;color:#fff;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+table th,table td{border:1px solid #eee;padding:8px;text-align:left}
+.topnav{background:#2b6cb0;color:#fff;padding:10px;display:flex;justify-content:space-between;align-items:center}
+.topnav a{color:#fff;margin-left:10px;text-decoration:none}
+.error{background:#ffdddd;padding:10px;border-left:4px solid #ff5c5c}
+pre{white-space:pre-wrap}
