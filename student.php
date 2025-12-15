@@ -57,7 +57,7 @@ $labs = $pdo->query("SELECT * FROM labs")->fetchAll(PDO::FETCH_ASSOC);
 
     /* Sidebar */
     .sidebar {
-      width: 280px;
+      width: 380px;
       background: linear-gradient(180deg, #1565c0 0%, #1976d2 100%);
       color: white;
       padding: 30px 0;
@@ -166,7 +166,7 @@ $labs = $pdo->query("SELECT * FROM labs")->fetchAll(PDO::FETCH_ASSOC);
     /* Main Content */
     .main-content {
       flex: 1;
-      margin-left: 280px;
+      margin-left: 380px;
       padding: 35px;
     }
 

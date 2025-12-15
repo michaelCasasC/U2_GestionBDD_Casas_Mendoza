@@ -42,347 +42,240 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Credenciales incorrectas';
     }
 }
-
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Lab Requests System</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background: linear-gradient(135deg, #1a7e2bff 0%, #4b9f59ff 50%, #68ba6aff 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 850px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .header {
-      background: linear-gradient(to right, #1a7e2cff, #41ab39ff);
-      color: white;
-      padding: 30px 25px;
-      text-align: center;
-      position: relative;
-    }
-
-    .header h1 {
-      font-size: 26px;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-
-    .header p {
-      opacity: 0.9;
-      font-size: 14px;
-    }
-
-    .header-icon {
-      background-color: rgba(255, 255, 255, 0.1);
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      font-size: 32px;
-    }
-
-    .form-container {
-      padding: 35px 30px;
-    }
-
-    .error {
-      background-color: #ffebee;
-      color: #c62828;
-      padding: 12px 15px;
-      border-radius: 8px;
-      margin-bottom: 25px;
-      font-size: 14px;
-      border-left: 4px solid #c62828;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .error i {
-      font-size: 18px;
-    }
-
-    .form-group {
-      margin-bottom: 25px;
-      position: relative;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #333;
-      font-size: 14px;
-    }
-
-    .input-with-icon {
-      position: relative;
-    }
-
-    .input-with-icon i {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #5c6bc0;
-      font-size: 18px;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 15px 15px 15px 50px;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      background-color: #f8f9fa;
-    }
-
-    .form-control:focus {
-      border-color: #3949ab;
-      box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
-      outline: none;
-      background-color: white;
-    }
-
-    .btn-login {
-      background: linear-gradient(to right, #1a7e27ff, #39ab54ff);
-      color: white;
-      border: none;
-      padding: 16px;
-      width: 100%;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-login:hover {
-      background: linear-gradient(to right, #0d1b6a, #283593);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3);
-    }
-
-    .btn-login:active {
-      transform: translateY(0);
-    }
-
-    .seed-users {
-      background-color: #f5f5f5;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 30px;
-      border-left: 4px solid #5c6bc0;
-    }
-
-    .seed-users h3 {
-      color: #1a237e;
-      font-size: 16px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .seed-users p {
-      color: #555;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .user-role {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-right: 8px;
-    }
-
-    .admin-role {
-      background-color: #ffebee;
-      color: #c62828;
-    }
-
-    .professor-role {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-    }
-
-    .student-role {
-      background-color: #e3f2fd;
-      color: #1565c0;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      color: #777;
-      font-size: 13px;
-      border-top: 1px solid #eee;
-      background-color: #fafafa;
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        border-radius: 15px;
-      }
-      
-      .header {
-        padding: 25px 20px;
-      }
-      
-      .form-container {
-        padding: 25px 20px;
-      }
-      
-      .header h1 {
-        font-size: 22px;
-      }
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #777;
-      cursor: pointer;
-      font-size: 18px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Lab Requests System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {min-height: 100vh; background: #eafde7;}
+        .panel-izquierdo {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('./Rename.jpg');
+            background-size: cover; 
+            background-position: center; 
+            color: #eafde7; 
+            border-radius: 0 40px 40px 0;
+        }
+        .titulo-principal {
+            font-size: 2.8rem; 
+            font-weight: 700; 
+            line-height: 1.2;
+        }
+        .titulo-formulario {
+            font-size: 2rem; 
+            font-weight: 700; 
+            color: #00312D;
+        }
+        .entrada-con-icono {
+            position: relative;
+        }
+        .entrada-con-icono i {
+            position: absolute; 
+            left: 15px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: #999;
+        }
+        .entrada-con-icono .form-control {
+            padding-left: 45px;
+        }
+        .form-control {
+            border: 1px solid #e0e0e0; 
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            background: white;
+        }
+        .boton-ingresar {
+            background: #00312D; 
+            border: none; 
+            padding: 14px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .boton-ingresar:hover {
+            background: #001f1c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 49, 45, 0.3);
+        }
+        .seccion-demostracion {
+            background: #f0f0f0; 
+            border-radius: 12px; 
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .boton-demo {
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .boton-demo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        .demo1 {background-color: #00312D; color:white;}
+        .demo2 {background-color: #1a7e2c; color:white;}
+        .demo3 {background-color: #2e7d32; color:white;}
+        .alert-danger {
+            border-radius: 8px;
+            border-left: 4px solid #c62828;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        @media (max-width: 768px) {
+            .panel-izquierdo {border-radius: 20px 20px 0 0;}
+            .titulo-principal {font-size: 2.2rem;}
+            .titulo-formulario {font-size: 1.8rem;}
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="header-icon">
-        <i class="fas fa-flask"></i>
-      </div>
-      <h1>Lab Requests System</h1>
-      <p>Accede a tu cuenta para gestionar solicitudes</p>
-    </div>
-    
-    <div class="form-container">
-      <?php if (!empty($error)): ?>
-        <div class="error">
-          <i class="fas fa-exclamation-circle"></i>
-          <span><?=htmlspecialchars($error)?></span>
-        </div>
-      <?php endif; ?>
-      
-      <form method="post" action="index.php" id="loginForm">
-        <div class="form-group">
-          <label for="email">Correo electrónico</label>
-          <div class="input-with-icon">
-            <i class="fas fa-envelope"></i>
-            <input class="form-control" id="email" name="email" type="email" required placeholder="usuario@ejemplo.com">
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="password">Contraseña</label>
-          <div class="input-with-icon">
-            <i class="fas fa-lock"></i>
-            <input class="form-control" id="password" name="password" type="password" required placeholder="••••••••">
-            <button type="button" class="password-toggle" id="togglePassword">
-              <i class="fas fa-eye"></i>
-            </button>
-          </div>
-        </div>
-        
-        <button type="submit" class="btn-login">
-          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
-        </button>
-      </form>
-      
-      <div class="seed-users">
-        <h3><i class="fas fa-users"></i> Usuarios de demostración</h3>
-        <p>
-          <span class="user-role admin-role">Admin</span> admin@example.com / Admin123!<br>
-          <span class="user-role professor-role">Profesor</span> prof1@example.com / Prof123!<br>
-          <span class="user-role student-role">Estudiante</span> student1@example.com / Stud123!
-        </p>
-      </div>
-    </div>
-    
-    <div class="footer">
-      <p>Sistema de Gestión de Solicitudes de Laboratorio &copy; <?=date('Y')?></p>
-    </div>
-  </div>
+    <div class="container-fluid">
+        <div class="row min-vh-100">
 
-  <script>
-    // Toggle para mostrar/ocultar contraseña
-    document.getElementById('togglePassword').addEventListener('click', function() {
-      const passwordInput = document.getElementById('password');
-      const icon = this.querySelector('i');
-      
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-      } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-      }
-    });
+            <!-- Panel Izquierdo -->
+            <div class="col-md-6 panel-izquierdo d-flex flex-column justify-content-center p-5">
+                <h1 class="titulo-principal mb-3">Sistema de<br>Gestión de Laboratorios</h1>
+                <p class="subtitulo mb-0">Gestiona tus solicitudes<br>de manera eficiente</p>
+            </div>
 
-    // Efecto de focus en los campos del formulario
-    const formControls = document.querySelectorAll('.form-control');
-    formControls.forEach(control => {
-      control.addEventListener('focus', function() {
-        this.parentElement.parentElement.classList.add('focused');
-      });
-      
-      control.addEventListener('blur', function() {
-        this.parentElement.parentElement.classList.remove('focused');
-      });
-    });
+            <!-- Panel Derecho -->
+            <div class="col-md-6 p-5 d-flex flex-column justify-content-center">
+                <h2 class="titulo-formulario mb-4">Iniciar Sesión</h2>
 
-    // Pequeña animación al cargar la página
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelector('.container').style.opacity = '0';
-      document.querySelector('.container').style.transform = 'translateY(20px)';
-      
-      setTimeout(() => {
-        document.querySelector('.container').style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        document.querySelector('.container').style.opacity = '1';
-        document.querySelector('.container').style.transform = 'translateY(0)';
-      }, 100);
-    });
-  </script>
+                <form id="formularioLogin" method="POST" action="index.php">
+                    <div class="mb-3">
+                        <label for="correo" class="form-label fw-medium text-secondary">Email</label>
+                        <div class="entrada-con-icono">
+                            <i class="fas fa-envelope"></i>
+                            <input id="email" type="email" name="email" class="form-control" placeholder="usuario@ejemplo.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="contrasena" class="form-label fw-medium text-secondary">Contraseña</label>
+                        <div class="entrada-con-icono">
+                            <i class="fas fa-lock"></i>
+                            <input id="password" type="password" name="password" class="form-control" placeholder="••••••••" required>
+                            <button type="button" class="password-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <?php if (!empty($error)): ?>
+                        <div class="alert alert-danger d-flex align-items-center mb-4">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span><?=htmlspecialchars($error)?></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <button type="submit" id="submit" class="btn boton-ingresar w-100 mb-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>Ingresar al Sistema
+                    </button>
+
+                    <div class="seccion-demostracion">
+                        <p class="text-center text-secondary mb-3 fw-medium">Usuarios de demostración:</p>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn boton-demo demo1" id="btnAdmin">
+                                <i class="fas fa-user-shield me-2"></i>Admin
+                            </button>
+                            <button type="button" class="btn boton-demo demo2" id="btnProfesor">
+                                <i class="fas fa-chalkboard-teacher me-2"></i>Profesor
+                            </button>
+                            <button type="button" class="btn boton-demo demo3" id="btnEstudiante">
+                                <i class="fas fa-user-graduate me-2"></i>Estudiante
+                            </button>
+                        </div>
+                        <p class="text-center text-secondary mt-3 small">
+                            Contraseña: misma que el usuario (Admin123!, Prof123!, Stud123!)
+                        </p>
+                    </div>
+
+                    <div class="col text-center mt-4">
+                        <p class="text-secondary mb-0 small">
+                            Sistema de Gestión de Solicitudes de Laboratorio &copy; <?=date('Y')?>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle para mostrar/ocultar contraseña
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Auto completar demo - Admin
+        document.getElementById('btnAdmin').onclick = () => {
+            document.getElementById('email').value = "admin@example.com";
+            document.getElementById('password').value = "Admin123!";
+            document.getElementById('submit').click();
+        };
+
+        // Auto completar demo - Profesor
+        document.getElementById('btnProfesor').onclick = () => {
+            document.getElementById('email').value = "prof1@example.com";
+            document.getElementById('password').value = "Prof123!";
+            document.getElementById('submit').click();
+        };
+
+        // Auto completar demo - Estudiante
+        document.getElementById('btnEstudiante').onclick = () => {
+            document.getElementById('email').value = "student1@example.com";
+            document.getElementById('password').value = "Stud123!";
+            document.getElementById('submit').click();
+        };
+
+        // Pequeña animación al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const leftPanel = document.querySelector('.panel-izquierdo');
+            const rightPanel = document.querySelector('.col-md-6.p-5');
+            
+            leftPanel.style.opacity = '0';
+            leftPanel.style.transform = 'translateX(-20px)';
+            rightPanel.style.opacity = '0';
+            rightPanel.style.transform = 'translateX(20px)';
+            
+            setTimeout(() => {
+                leftPanel.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                rightPanel.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                leftPanel.style.opacity = '1';
+                leftPanel.style.transform = 'translateX(0)';
+                rightPanel.style.opacity = '1';
+                rightPanel.style.transform = 'translateX(0)';
+            }, 100);
+        });
+    </script>
 </body>
 </html>
