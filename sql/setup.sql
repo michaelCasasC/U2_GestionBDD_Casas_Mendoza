@@ -136,7 +136,7 @@ GO
 CREATE USER [LabProf] FOR LOGIN [LabProf];
 GO
 -- Permisos específicos para Profesor
-GRANT SELECT ON roles TO LabProf;
+GRANT SELECT ON roles TO LabProf
 GRANT SELECT ON users TO LabProf;
 GRANT SELECT ON labs TO LabProf;
 GRANT SELECT, UPDATE ON lab_requests TO LabProf;
@@ -174,3 +174,75 @@ GRANT INSERT ON audit_logs TO StudentRole;
 ALTER ROLE [StudentRole] ADD MEMBER [LabStudent];
 GO
 
+
+USE LabRequestsDB;
+GO
+
+IF OBJECT_ID('sp_cancel_lab_request', 'P') IS NOT NULL
+    DROP PROCEDURE sp_cancel_lab_request;
+GO
+
+CREATE PROCEDURE sp_cancel_lab_request
+    @request_id INT,
+    @student_id INT,
+    @student_email NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Validar que la solicitud pertenezca al estudiante y esté pendiente
+        IF NOT EXISTS (
+            SELECT 1 FROM lab_requests
+            WHERE id = @request_id
+              AND student_id = @student_id
+              AND status = 'PENDING'
+        )
+        BEGIN
+            RAISERROR('Solicitud inválida o no autorizada.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Cancelar solicitud
+        UPDATE lab_requests
+        SET
+            status = 'CANCELLED',
+            updated_at = SYSUTCDATETIME()
+        WHERE id = @request_id;
+
+        -- Auditoría
+        INSERT INTO audit_logs (
+            user_id,
+            user_email,
+            user_role,
+            action,
+            target_table,
+            target_id,
+            details
+        )
+        VALUES (
+            @student_id,
+            @student_email,
+            'student',
+            'CANCEL',
+            'lab_requests',
+            CAST(@request_id AS NVARCHAR(50)),
+            'Solicitud cancelada por el estudiante'
+        );
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+
+GRANT EXECUTE ON sp_cancel_lab_request TO LabStudent;
+GO

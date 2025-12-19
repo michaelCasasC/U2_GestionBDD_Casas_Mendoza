@@ -6,10 +6,12 @@ require_role('professor');
 $pdo = getDB();
 $user = current_user();
 
+
 // list pending requests
 $stmt = $pdo->prepare("SELECT lr.*, l.name as lab_name, u.full_name as student_name, u.email as student_email FROM lab_requests lr JOIN labs l ON lr.lab_id = l.id JOIN users u ON lr.student_id = u.id WHERE lr.status = 'PENDING' ORDER BY lr.created_at ASC");
 $stmt->execute();
 $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!doctype html>
 <html lang="es">
@@ -574,6 +576,7 @@ $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
               </thead>
               <tbody>
                 <?php foreach($requests as $r): ?>
+                  
                   <tr>
                     <td><strong>#<?= $r['id'] ?></strong></td>
                     <td class="student-info">
